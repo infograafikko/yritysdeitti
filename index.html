@@ -57,12 +57,23 @@ a:link {
 }
 
 
-.change {
+#change {
   background-color: #9474cb;
   padding: 5px 5px 5px 5px;
   width: 180px;
   text-align: center;
   color: white;
+}
+
+#down {
+  background-color: black;
+  padding: 5px 5px 5px 5px;
+  width: 180px;
+  color: white;
+  margin: 5px 5px 5px 5px;
+  text-align: center;
+  font-size: 20px;
+  display: none;
 }
 
 #share {
@@ -71,6 +82,7 @@ a:link {
   border-color: #2FC3C7;
   width: 170px;
   padding: 5px 5px 5px 5px;
+  margin-bottom: 5px;
   border-width: 1px;
 }
 
@@ -137,7 +149,7 @@ a:link {
   <h1>Yritysten deittisimulaattori</h1>
   <embed type="image/svg+xml" src="images/Hearts.svg" width="400" height="212" scale="tofit"/>
   <p>Älykäs ystävänpäiväalgoritmi etsii yritykselle sinulle unelmiesi yrityskumppanin. Antaudu rakkaudelle ja löydä unelmiesi kumppani.</p>
-    Yrityksesi: <input type="text" id="yritys" value="Omnicom"><br>
+    Yrityksesi: <input type="text" id="yritys" value="ToinenPHD"><br>
     <div id = "selectList">Valintasi: <select id="firmList" onclick="changeSelected()"></select></div>
   <div id="tryagain">Ei löydetty osumia. Hae eri nimellä</div>
   <div id="submit" onclick="getMessage()"><div class="unselectable">Löydä rakkaasi <3</div></div><div id="searching">Rakkaustietoja haetaan <3 <3 <3</div>
@@ -148,16 +160,20 @@ a:link {
       <div id="arrow" onclick="seekLover()"><div class="unselectable">Kokeile toista<br>toimialaa</div></div>
     </div>
     <div id=center>
-      <div class="change" onclick="rightOne()"><div class="unselectable">Tämä on se oikea <3</div></div>
+      <div id="change" onclick="rightOne()"><div class="unselectable">Tämä on se oikea <3</div></div>
+    </div>
+    <div id=center>
+      <div id="down">↓</div>
     </div>
   </div>
   <br>
   <div id ="results">
   <hr>
   <div id="resultHeading"><b>Omnicom Media Group Oy <3<br>Kingfroll Oy</b></div>
-    <div id="resultText">Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi Googlen kautta. Mikäli etsit uusia rakkaita markkinointialalta ota yhteyttä <a href="https://www.annalect.fi">Annalect Finlandiin</a> ja mennään treffeille.</div>
+    <div id="resultText">Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi Googlen kautta. Mikäli etsit rakkautta markkinointialalta ota yhteyttä <a href="https://www.annalect.fi">Annalect Finlandiin</a> ja mennään treffeille.</div>
     <br>
     <div id="share" onclick="shareThis()"><div class="unselectable">Jaa tulos somessa</div></div>
+    <a href="https://infograafikko.github.io/yritysdeitti/" style="text-decoration: none"><div id="share"><div class="unselectable">Pelaa uudestaan</div></div></a>
   </div>
 
   <script>
@@ -273,15 +289,17 @@ function getMessage() {
 //get information from Ytunnus page
 function ownFirmYpage() {
   d3.json(ownFirmURL, function (error, jsonOwnY) {
-    ownFirmCity = jsonOwnY.results[0].registedOffices[0].name;
+    ownFirmCity = jsonOwnY.results[0].registedOffices[1].name;
 
     pickToimialat();
   })
 }
 
-//This removes all the options
+//This selects the company from the list
 function changeSelected() {
   var sel = document.getElementById("firmList");
+
+  //Save to variables company information
   ownFirmName = sel.options[sel.selectedIndex].text;
 
   ownFirmY = jsonData.results[sel.selectedIndex].businessId;
@@ -393,7 +411,7 @@ function gatherLoverInfo() {
     document.getElementById('searching').style.display = 'none';
 
     document.getElementById('toimiala').innerHTML = '<b>Toimiala:</b><br>' + theOneLine;
-    document.getElementById('kuvaus').innerHTML = theOneName + ' sijaitsee paikkakunnalla ' + theOneCity + ' kuten sinunkin yritys. Yritystenne ikäero on vain ' + ageDifText + ' vuotta. Olisiko jo aika tutustua paremmin?';
+    document.getElementById('kuvaus').innerHTML = theOneName + ' sijaitsee paikkakunnalla ' + ownFirmCity + ' kuten sinunkin yritys. Yritystenne ikäero on vain ' + ageDifText + ' vuotta. Olisiko jo aika tutustua paremmin?';
 
     document.getElementById('loveResults').style.display = 'block';
 
@@ -403,12 +421,19 @@ function gatherLoverInfo() {
 //Change rightOneText
 function rightOne() {
 
-  document.getElementById('results').style.display = 'block';
+  //Show down arrow
+  document.getElementById('down').style.display = 'block';
+
+  //Make box gray
+  document.getElementById('change').style.backgroundColor = '#f1f1f1';
 
 
+  //Manipulate results text
   document.getElementById('resultHeading').innerHTML = '<b>' + ownFirmName + ' <3<br>' + theOneName + '</b>';
   document.getElementById('resultText').innerHTML = "Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi <a href='https://www.google.com/search?q=" + theOneName + "'target='_blank'>Googlen</a> kautta. Mikäli etsit uusia rakkaita markkinointialalta ota yhteyttä <a href='https://www.annalect.fi'>Annalect Finlandiin</a> ja mennään treffeille.";
 
+  //Show results
+  document.getElementById('results').style.display = 'block';
 
 }
 
