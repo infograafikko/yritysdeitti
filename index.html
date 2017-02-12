@@ -339,13 +339,18 @@ function seekLover () {
 
             ageDifText = (minDif[0].ageDif / (1000 * 3600 * 24) / 365).toFixed(1)
 
+            //Save url where to seek lover information
             selectLoveFirm = minDif[0].detailsUri;
+
+            //Change url to https format
+            selectLoveFirm = "https" + selectLoveFirm.substr(4)
 
           } else {
             minDif = jsonLovers.results;
 
             ageDifText = (minDif[0].ageDif / (1000 * 3600 * 24) / 365).toFixed(1)
 
+            //Save url where to seek lover information
             selectLoveFirm = selectToimialat[counter-1];
 
           }
