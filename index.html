@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.1/d3.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+<style>
+body {
+  font-family: Raleway, sans-serif;
+  width: 350px;
+}
+
+a:link {
+  color: #2FC3C7;
+}
+
+#submit {
+  background-color: #2FC3C7;
+  padding: 5px 5px 5px 5px;
+  width: 150px;
+  color: white;
+  margin: 15px 0px 5px 0px;
+}
+
+#toimiala {
+  background-color: black;
+  width: 350px;
+  padding: 5px 5px 5px 5px;
+  color: white;
+}
+
+#kuvaus {
+  background-color: #f1f1f1;
+  width: 350px;
+  padding: 5px 5px 5px 5px;
+  color: black;
+  height: 100px;
+}
+
+#center {
+  display: flex;
+  justify-content: center;
+}
+
+#arrow {
+  background-color: #2FC3C7;
+  padding: 5px 5px 5px 5px;
+  width: 180px;
+  height: 50px;
+  color: white;
+  margin: 15px 5px 5px 5px;
+  text-align: center;
+  font-size: 20px;
+}
+
+
+.change {
+  background-color: #9474cb;
+  padding: 5px 5px 5px 5px;
+  width: 180px;
+  text-align: center;
+  color: white;
+}
+
+#share {
+  color: #2FC3C7;
+  border-style: solid;
+  border-color: #2FC3C7;
+  width: 170px;
+  padding: 5px 5px 5px 5px;
+  border-width: 1px;
+}
+
+#share:hover {
+  color: white;
+  background-color: #2FC3C7;
+  border-style: solid;
+  border-color: #2FC3C7;
+  width: 170px;
+  padding: 5px 5px 5px 5px;
+  border-width: 1px;
+}
+
+#tryagain {
+  color: red;
+  display: none;
+}
+
+#selectList {
+  display: none;
+}
+
+#results {
+  display: none;
+}
+
+#resultHeading {
+  background-color: #2FC3C7;
+  width: 350px;
+  padding: 5px 5px 5px 5px;
+  color: white;
+  font-size: 20px;
+}
+
+#resultText {
+  background-color: #f1f1f1;
+  width: 350px;
+  padding: 5px 5px 5px 5px;
+  color: black;
+  height: 100px;
+}
+
+#loveResults {
+  display: none;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+</style>
+<body>
+  <h1>Yritysten deittisimulaattori</h1>
+  <embed type="image/svg+xml" src="images/Hearts.svg" width="400" height="212" scale="tofit"/>
+  <p>Älykäs ystävänpäiväalgoritmi etsii yritykselle sinulle unelmiesi yrityskumppanin. Antaudu rakkaudelle ja löydä unelmiesi kumppani.</p>
+    Yrityksesi: <input type="text" id="yritys" value="Omnicom"><br>
+    <div id = "selectList">Valintasi: <select id="firmList" onclick="changeSelected()"></select></div>
+  <div id="tryagain">Ei löydetty osumia. Hae eri nimellä</div>
+  <div id="submit" onclick="getMessage()"><div class="unselectable">Löydä rakkaasi <3</div></div>
+  <div id="loveResults">
+    <div id="toimiala"><b>Toimiala:</b> <br />Yksivuotiset viherkasvit</div>
+    <div id="kuvaus">Kingfroll OY sijaitsee paikkakunnalla HELSINKI kuten sinunkin yritys. Yritystenne ikäero on vain 3,6 vuotta. Olisiko jo aika ottaa yhteyttä ja tutustua paremmin?</div>
+    <div id=center>
+      <div id="arrow" onclick="seekLover()"><div class="unselectable">Kokeile toista<br>toimialaa</div></div>
+    </div>
+    <div id=center>
+      <div class="change" onclick="rightOne()"><div class="unselectable">Tämä on se oikea <3</div></div>
+    </div>
+  </div>
+  <br>
+  <div id ="results">
+  <hr>
+  <div id="resultHeading"><b>Omnicom Media Group Oy <3<br>Kingfroll Oy</b></div>
+    <div id="resultText">Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi Googlen kautta. Mikäli etsit uusia rakkaita markkinointialalta ota yhteyttä <a href="https://www.annalect.fi">Annalect Finlandiin</a> ja mennään treffeille.</div>
+    <br>
+    <div id="share" onclick="shareThis()"><div class="unselectable">Jaa tulos somessa</div></div>
+  </div>
+
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '777287275757636',
+        xfbml      : true,
+        version    : 'v2.5'
+      });
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "//connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+
+<script>
+
+ var jsonData,
+    ownFirmCity,
+    ownFirmName,
+    ownFirmCode,
+    ownFirmAge,
+    ownFirmLine,
+    ownFirmY,
+    ownFirmURL,
+    loversUrl,
+    selectLoveFirm,
+    ageDifText,
+    minDif;
+  var selectToimialat = [];
+  var workingToimialat = [];
+  var counter = 0
+
+//This removes all the options
+function removeOptions(selectbox) {
+    var i;
+    for(i = selectbox.options.length - 1 ; i >= 0 ; i--) {
+        selectbox.remove(i);
+    }
+}
+
+//update after search
+function getMessage() {
+
+
+
+    //Get searchValue and make url
+    var searchValue = d3.select("#yritys").property("value")
+    var searchFirm = "http://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=30&resultsFrom=0&name=" + searchValue;
+
+    console.log(searchFirm)
+    //Delete all the options from list
+    removeOptions(document.getElementById("firmList"));
+
+
+    d3.json(searchFirm, function (error, jsonSearch) {
+      if (error) {
+        document.getElementById('tryagain').style.display = 'block';
+      } else {
+
+      //Hide try again
+      document.getElementById('tryagain').style.display = 'none';
+
+      //Show the dropdown
+      document.getElementById('selectList').style.display = 'block';
+
+      //Save data to variable
+      jsonData = jsonSearch;
+
+      if (jsonSearch.results.length > 0) {
+
+
+      //Add new options to list
+      for (i = 0; i < jsonSearch.results.length; i++) {
+
+        var x = document.getElementById("firmList");
+
+        var option = document.createElement("option");
+        option.text = jsonSearch.results[i].name;
+        x.add(option);
+
+      }
+
+      var sel = document.getElementById("firmList");
+      ownFirmName = sel.options[sel.selectedIndex].text;
+
+      ownFirmY = jsonData.results[sel.selectedIndex].businessId;
+      ownFirmAge = jsonData.results[sel.selectedIndex].registrationDate;
+
+      console.log(jsonData.results[sel.selectedIndex])
+
+      //Get additional information based on ytunnus
+
+      ownFirmURL = "http://avoindata.prh.fi/opendata/bis/v1/" + ownFirmY;
+
+      ownFirmYpage();
+    }
+
+    }})
+
+
+}
+
+//get information from Ytunnus page
+function ownFirmYpage() {
+  d3.json(ownFirmURL, function (error, jsonOwnY) {
+    ownFirmCity = jsonOwnY.results[0].registedOffices[0].name;
+
+    pickToimialat();
+  })
+}
+
+//This removes all the options
+function changeSelected() {
+  var sel = document.getElementById("firmList");
+  ownFirmName = sel.options[sel.selectedIndex].text;
+
+  ownFirmY = jsonData.results[sel.selectedIndex].businessId;
+  ownFirmAge = jsonData.results[sel.selectedIndex].registrationDate;
+
+  ownFirmURL = "http://avoindata.prh.fi/opendata/bis/v1/" + ownFirmY;
+
+  ownFirmYpage();
+
+  console.log(jsonData.results[sel.selectedIndex])
+}
+
+//Select toimialat
+function pickToimialat() {
+
+  d3.tsv("data/toimialat.tsv", function(error, toimialat) {
+
+    selectToimialat = [];
+
+    for (i = 0; i < 100; i++) {
+      var luckyRow = Math.floor(Math.random()/(1/toimialat.length));
+      var luckyCode = toimialat[luckyRow].businessLineCode;
+      loversUrl = "http://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=500&resultsFrom=0&name=&businessLineCode=" + luckyCode + "&registeredOffice=" + ownFirmCity;
+      selectToimialat.push(loversUrl)
+    }
+    seekLover();
+
+  })
+}
+
+//Save lover information
+function seekLover () {
+
+    //Make arrow gray
+    document.getElementById('arrow').style.backgroundColor = '#f1f1f1';
+
+
+    d3.json(selectToimialat[counter], function (error, jsonLovers) {
+      if(error) {
+        //add one to counter
+        counter = counter + 1;
+        seekLover();
+      } else {
+        //add to workingList
+        workingToimialat.push(selectToimialat[counter])
+        console.log(selectToimialat[counter])
+        //add one to counter
+        counter = counter + 1;
+
+        //Count age difference compared to ownFirm
+        jsonLovers.results.forEach(function(d) {
+          d.ageDif = Math.abs(new Date(d.registrationDate) - new Date(ownFirmAge));
+        });
+
+        console.log(jsonLovers.results.length)
+
+        //If more than one firm, sort the data by age difference
+        if(jsonLovers.results.length > 1) {
+
+          minDif = jsonLovers.results
+            .sort(function(a, b) {
+              return d3.ascending(a.ageDif, b.ageDif);
+            });
+
+            ageDifText = (minDif[0].ageDif / (1000 * 3600 * 24) / 365).toFixed(1)
+
+            selectLoveFirm = minDif[0].detailsUri;
+
+          } else {
+            minDif = jsonLovers.results;
+
+            ageDifText = (minDif[0].ageDif / (1000 * 3600 * 24) / 365).toFixed(1)
+
+            selectLoveFirm = selectToimialat[counter-1];
+
+          }
+
+        gatherLoverInfo();
+
+      }
+    })
+}
+
+//Gather information about lover
+function gatherLoverInfo() {
+
+  d3.json(selectLoveFirm, function (error, jsonTheOne) {
+
+    if (error) throw error;
+
+    theOneCity = jsonTheOne.results[0].registedOffices[1].name;
+    theOneName = jsonTheOne.results[0].name;
+    theOneCode = jsonTheOne.results[0].businessLines[0].code;
+    theOneLine = jsonTheOne.results[0].businessLines[0].name;
+    theOneAge = jsonTheOne.results[0].registrationDate;
+
+
+    //Manipulate html based on results
+
+    //Make arrow gray
+    document.getElementById('arrow').style.backgroundColor = '#2FC3C7';
+
+    document.getElementById('toimiala').innerHTML = '<b>Toimiala:</b><br>' + theOneLine;
+    document.getElementById('kuvaus').innerHTML = theOneName + ' sijaitsee paikkakunnalla ' + theOneCity + ' kuten sinunkin yritys. Yritystenne ikäero on vain ' + ageDifText + ' vuotta. Olisiko jo aika tutustua paremmin?';
+
+    document.getElementById('loveResults').style.display = 'block';
+
+  })
+}
+
+//Change rightOneText
+function rightOne() {
+
+  document.getElementById('results').style.display = 'block';
+
+
+  document.getElementById('resultHeading').innerHTML = '<b>' + ownFirmName + ' <3<br>' + theOneName + '</b>';
+  document.getElementById('resultText').innerHTML = "Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi <a href='http://www.google.com/search?q=" + theOneName + "'target='_blank'>Googlen</a> kautta. Mikäli etsit uusia rakkaita markkinointialalta ota yhteyttä <a href='https://www.annalect.fi'>Annalect Finlandiin</a> ja mennään treffeille.";
+
+
+}
+
+//Share text
+function shareThis() {
+
+    FB.ui({
+        display: 'popup',
+        method: 'share',
+        title: theOneName + ' on minun firmani yritysdeitti.',
+        description: 'Antaudu rakkaudella ja selvitä oma yritysdeittisi Annalect Finlandin yritysdeittisovelluksella.',
+        link: "THIS IS A LINK TO YOUR QUIZ'S PAGE ON YOUR WEBSITE",
+        picture: "THIS PICTURE WILL BE THE FACEBOOK SHARE IMAGE",
+        href: "http://www.annalect.fi",
+
+  }, function(response){});
+};
+
+//enter button listener for text box
+document.getElementById("yritys")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode == 13) {
+        getMessage();
+    }
+});
+
+</script>
+</body>
