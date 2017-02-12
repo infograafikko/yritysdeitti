@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.1/d3.min.js"></script>
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 </head>
@@ -203,7 +206,7 @@ function getMessage() {
 
     //Get searchValue and make url
     var searchValue = d3.select("#yritys").property("value")
-    var searchFirm = "http://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=30&resultsFrom=0&name=" + searchValue;
+    var searchFirm = "https://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=30&resultsFrom=0&name=" + searchValue;
 
     console.log(searchFirm)
     //Delete all the options from list
@@ -248,7 +251,7 @@ function getMessage() {
 
       //Get additional information based on ytunnus
 
-      ownFirmURL = "http://avoindata.prh.fi/opendata/bis/v1/" + ownFirmY;
+      ownFirmURL = "https://avoindata.prh.fi/opendata/bis/v1/" + ownFirmY;
 
       ownFirmYpage();
     }
@@ -275,7 +278,7 @@ function changeSelected() {
   ownFirmY = jsonData.results[sel.selectedIndex].businessId;
   ownFirmAge = jsonData.results[sel.selectedIndex].registrationDate;
 
-  ownFirmURL = "http://avoindata.prh.fi/opendata/bis/v1/" + ownFirmY;
+  ownFirmURL = "https://avoindata.prh.fi/opendata/bis/v1/" + ownFirmY;
 
   ownFirmYpage();
 
@@ -292,7 +295,7 @@ function pickToimialat() {
     for (i = 0; i < 100; i++) {
       var luckyRow = Math.floor(Math.random()/(1/toimialat.length));
       var luckyCode = toimialat[luckyRow].businessLineCode;
-      loversUrl = "http://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=500&resultsFrom=0&name=&businessLineCode=" + luckyCode + "&registeredOffice=" + ownFirmCity;
+      loversUrl = "https://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=500&resultsFrom=0&name=&businessLineCode=" + luckyCode + "&registeredOffice=" + ownFirmCity;
       selectToimialat.push(loversUrl)
     }
     seekLover();
@@ -387,7 +390,7 @@ function rightOne() {
 
 
   document.getElementById('resultHeading').innerHTML = '<b>' + ownFirmName + ' <3<br>' + theOneName + '</b>';
-  document.getElementById('resultText').innerHTML = "Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi <a href='http://www.google.com/search?q=" + theOneName + "'target='_blank'>Googlen</a> kautta. Mikäli etsit uusia rakkaita markkinointialalta ota yhteyttä <a href='https://www.annalect.fi'>Annalect Finlandiin</a> ja mennään treffeille.";
+  document.getElementById('resultText').innerHTML = "Onneksi olkoon unelmiesi deitin löytämisestä. Uuden rakkaasi yhteystiedot löydät esimerkiksi <a href='https://www.google.com/search?q=" + theOneName + "'target='_blank'>Googlen</a> kautta. Mikäli etsit uusia rakkaita markkinointialalta ota yhteyttä <a href='https://www.annalect.fi'>Annalect Finlandiin</a> ja mennään treffeille.";
 
 
 }
@@ -402,7 +405,7 @@ function shareThis() {
         description: 'Antaudu rakkaudella ja selvitä oma yritysdeittisi Annalect Finlandin yritysdeittisovelluksella.',
         link: "THIS IS A LINK TO YOUR QUIZ'S PAGE ON YOUR WEBSITE",
         picture: "THIS PICTURE WILL BE THE FACEBOOK SHARE IMAGE",
-        href: "http://www.annalect.fi",
+        href: "https://www.annalect.fi",
 
   }, function(response){});
 };
