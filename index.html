@@ -38,7 +38,6 @@ a:link {
   width: 100%;
   padding: 5px 5px 5px 5px;
   color: black;
-  height: 100px;
 }
 
 #center {
@@ -173,7 +172,7 @@ a:link {
     <div id="resultText"></div>
     <br>
     <div id="share" onclick="shareThis()"><div class="unselectable">Jaa tulos somessa</div></div>
-    <a href="https://infograafikko.github.io/yritysdeitti/" style="text-decoration: none"><div id="share"><div class="unselectable">Pelaa uudestaan</div></div></a>
+    <a href="https://www.annalect.fi/etsi-deittikoneella-unelmiesi-yrityskumppani/" style="text-decoration: none"><div id="share"><div class="unselectable">Pelaa uudestaan</div></div></a>
   </div>
 
   <script>
@@ -419,6 +418,8 @@ function gatherLoverInfo() {
 
     //Manipulate html based on results
 
+
+
     //Make arrow gray
     document.getElementById('arrow').style.backgroundColor = '#2FC3C7';
 
@@ -426,7 +427,15 @@ function gatherLoverInfo() {
     document.getElementById('searching').style.display = 'none';
 
     document.getElementById('toimiala').innerHTML = '<b>Toimiala:</b><br>' + theOneLine;
+
+    if(theOneName == "ToinenPHD Oy" | theOneName == "OMD Finland Oy" | theOneName == "Omnicom Media Group Finland Oy" | theOneName == "Ainoa Helsinki Oy") {
+      document.getElementById('kuvaus').innerHTML = 'Ihanaa! Löysit meidät unelmien deittikumppaniksi. Ota tästä kuva ja lähetä se yritystietojen kanssa osoitteeseen info.finland@annalect.com. Tarjoamme ilmaisen aamiaisen. Jos jaat tämän sosiaalisessa mediassa, saat myös ilmaisen lounaan <3 <3 <3';
+
+    } else {
+
     document.getElementById('kuvaus').innerHTML = theOneName + ' sijaitsee paikkakunnalla ' + ownFirmCity + ' kuten sinunkin yritys. Yritystenne ikäero on vain ' + ageDifText + ' vuotta. Olisiko jo aika tutustua paremmin?';
+
+    }
 
     document.getElementById('loveResults').style.display = 'block';
 
