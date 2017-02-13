@@ -111,7 +111,7 @@ a:link {
 }
 
 #resultHeading {
-  background-color: #2FC3C7;
+  background-color: #9474cb;
   width: 300px;
   padding: 5px 5px 5px 5px;
   color: white;
@@ -146,9 +146,9 @@ a:link {
 
 </style>
 <body>
-  <h1>Hae yritysdeittiä <3</h1>
+  <h1>Hae yritysdeittiä</h1>
   <embed type="image/svg+xml" src="images/Hearts.svg" width="300" height="212" scale="tofit"/>
-  <p>Ystävänpäiväalgoritmi etsii yrityksellesi lähiseudulta unelmiesi yrityskumppanin. Algoritmi ehdottaa kumppanuuksia eri toimialoilta. Antaudu rakkaudelle.</p>
+  <p>Ystävänpäiväalgoritmi etsii yrityksellesi unelmiesi yrityskumppanin. Algoritmi ehdottaa kumppanuuksia eri toimialoilta. Antaudu rakkaudelle.</p>
     Yrityksesi: <input type="text" id="yritys" value="ToinenPHD"><br>
     <div id = "selectList">Valintasi: <select id="firmList" onclick="changeSelected()"></select></div>
   <div id="tryagain">Ei löydetty osumia. Hae eri nimellä</div>
@@ -291,12 +291,25 @@ function ownFirmYpage() {
   d3.json(ownFirmURL, function (error, jsonOwnY) {
     ownFirmCity = jsonOwnY.results[0].registedOffices[1].name;
 
+    //Translate city names from swedish to finnish
+    if(ownFirmCity == "HELSINGFORS") {
+      ownFirmCity = "HELSINKI";
+    } else if (ownFirmCity == "BORGÅ") {
+      ownFirmCity = "PORVOO";
+    } else if (ownFirmCity == "SIBBO") {
+      ownFirmCity = "SIPOO";
+    }
+
     pickToimialat();
   })
 }
 
 //This selects the company from the list
 function changeSelected() {
+
+  //Show searching partner text
+  document.getElementById('searching').style.display = 'block';
+
   var sel = document.getElementById("firmList");
 
   //Save to variables company information
@@ -443,8 +456,8 @@ function shareThis() {
     FB.ui({
         display: 'popup',
         method: 'share',
-        title: theOneName + ' on minun firmani yritysdeitti.',
-        description: 'Antaudu rakkaudella ja selvitä oma yritysdeittisi Annalect Finlandin yritysdeittisovelluksella.',
+        title: ownFirmName + ' <3 ' + theOneName,
+        description: 'Selvitin B2B-deittikoneella oman yritykseni unelmien deittikumppanin.',
         link: "THIS IS A LINK TO YOUR QUIZ'S PAGE ON YOUR WEBSITE",
         picture: "THIS PICTURE WILL BE THE FACEBOOK SHARE IMAGE",
         href: "https://www.annalect.fi",
