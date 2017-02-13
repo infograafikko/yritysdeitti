@@ -172,6 +172,7 @@ a:link {
     <div id="resultText"></div>
     <br>
     <div id="share" onclick="shareThis()"><div class="unselectable">Jaa tulos somessa</div></div>
+    <div id="share" onclick="reloadPage()"><div class="unselectable">Pelaa uudestaan</div></div>
   </div>
 
   <script>
@@ -483,6 +484,10 @@ document.getElementById("yritys")
         getMessage();
     }
 });
+
+function reloadPage() {
+  location.reload(false)
+}
 
 </script>
 </body>
