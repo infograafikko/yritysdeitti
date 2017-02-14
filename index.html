@@ -254,7 +254,7 @@ function getMessage() {
       if (jsonSearch.results.length > 0) {
 
 
-      //Add new options to list
+      //Add new options to list based on search results
       for (i = 0; i < jsonSearch.results.length; i++) {
 
         var x = document.getElementById("firmList");
@@ -333,7 +333,7 @@ function pickToimialat() {
 
     selectToimialat = [];
 
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < 400; i++) {
       var luckyRow = Math.floor(Math.random()/(1/toimialat.length));
       var luckyCode = toimialat[luckyRow].businessLineCode;
       loversUrl = "https://avoindata.prh.fi/bis/v1?totalResults=false&maxResults=500&resultsFrom=0&name=&businessLineCode=" + luckyCode + "&registeredOffice=" + ownFirmCity;
@@ -415,6 +415,13 @@ function gatherLoverInfo() {
     theOneLine = jsonTheOne.results[0].businessLines[0].name;
     theOneAge = jsonTheOne.results[0].registrationDate;
 
+    //If own firm is the one then run again
+    if(theOneName == ownFirmName) {
+      //add one to counter
+      counter = counter + 1;
+      seekLover();
+    } else {
+
 
     //Manipulate html based on results
 
@@ -439,6 +446,7 @@ function gatherLoverInfo() {
 
     document.getElementById('loveResults').style.display = 'block';
 
+    }
   })
 }
 
